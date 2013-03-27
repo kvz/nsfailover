@@ -15,11 +15,8 @@
 #
 # You could periodically run this script using crontab, solo & timeout.
 #
-# This is actually recommended by Amazon EC2
-#  https://aws.amazon.com/support/case?caseId=82895641
-#
 # Usage:
-#  NS_1=10.0.0.1 sudo -E ./dns-failover.sh
+#  NS_1=10.0.0.1 sudo -E ./nsfailover.sh
 #
 # By default fails back to Google resolving Nameservers.
 #
