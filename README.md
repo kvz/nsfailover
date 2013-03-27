@@ -6,13 +6,14 @@ Together with EC2 Premium support I've established that:
 support for detecting and doing failovers for DNS servers so you 
 may need to write your own solution as you mentioned. " - Amazon Web Services Jan 22, 2013 01:13 AM PST
 
-Read a [longer introduction on my blog](http://kvz.io/blog/2013/03/27/poormans-way-to-decent-dns-failover/). 
+Read a [longer introduction on my blog](http://kvz.io/blog/2013/03/27/poormans-way-to-decent-dns-failover/)
+which was [featured on Hacker News](https://news.ycombinator.com/item?id=5450140)' frontpage. 
 
 This simple program defeats DNS outages bringing down your platform.
 
 ## nsfailover
 
-Every minute, `nslookup.sh` checks to see if the primary configured nameserver
+Every minute (or whatever), `nsfailover.sh` checks to see if the primary configured nameserver
 can resolve `google.com`.
 If it cannot, it writes the secondary, or even tertary server to 
 function as the primary server in `/etc/resolf.conf`.
@@ -35,7 +36,7 @@ crontab -e
 
 ## Config
 
-`nsfailover.sh` is configured through environment variables.
+**nsfailover** is configured through environment variables.
 Here they are with their defaults:
 
 
@@ -53,9 +54,16 @@ NS_TIMEOUT="3" # http://linux.die.net/man/5/resolv.conf
 NS_WRITEPROTECT="no" # Use this to write-protect /etc/resolv.conf
 ```
 
+You can use environment variables in many ways: at the top of a script or crontab, 
+`export` from another script, or pass them straight to the program:
+
+```bash
+NS_ENABLE="no" ./nsfailover.sh # <-- silly, but works :)
+```
+
 ## Notes
 
-`nslookup.sh`:
+**nsfailover**
 
 - only rewrites `/etc/resolv.conf` if it has changes
 - makes a backup to e.g. `/etc/resolv.conf.bak-20130327114321`
