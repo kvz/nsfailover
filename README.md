@@ -36,7 +36,7 @@ So I've decided to do this with just crontab and bash.
 
 Every minute, `nslookup.sh` checks to see if the primary configured nameserver
 can resolve `google.com`, and writes that to `/etc/resolf.conf`.
-If it cannot, it writes the secondairy, or tertiary server.
+If it cannot, it writes the secondary, or tertary server.
 This way, requests are stalled for a minute, tops, and all following requests
 are fast, even if the primary stays down.
 
