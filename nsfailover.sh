@@ -147,7 +147,7 @@ if [ "${resolvconf}" != "${current}" ]; then
   echo -e "# Written by ${__FILE__} @ ${curdate}\n${resolvconf}" |tee "${NS_FILE}"
   [ "${NS_WRITEPROTECT}" = "yes" ] && chattr +i "${NS_FILE}"
 
-  emergency "${NS_FILE} change was required"
+  emergency "${NS_FILE} change was required to switch to ${use_level} (${use_server})"
 fi
 
 info "No need to change ${NS_FILE}"
