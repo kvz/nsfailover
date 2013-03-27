@@ -61,25 +61,25 @@ Here they are with their defaults:
 
 ```bash
 LOG_LEVEL="6" # 7 = debug, 0 = emergency
-NS_ENABLE="no" # Set to no to disable
-NS_TESTDOMAIN="google.com" # Use this to determine if NS is healthy
 NS_1="" # Primary Nameserver (172.16.0.23 for Amazon EC2). You need to set this yourself
 NS_2="8.8.8.8" # Secundary Nameserver: Google
 NS_3="4.2.2.2" # Tertiary Nameserver: Level3
-NS_TIMEOUT="3" # http://linux.die.net/man/5/resolv.conf
 NS_ATTEMPTS="1" # http://linux.die.net/man/5/resolv.conf
-NS_WRITEPROTECT="no" # Use this to write-protect /etc/resolv.conf
+NS_ENABLE="no" # Set to no to disable
 NS_FILE="/etc/resolv.conf" # Where to write resolving conf
 NS_SEARCH="" # Domain to search hosts in (compute-1.internal for Amazon EC2)
+NS_TESTDOMAIN="google.com" # Use this to determine if NS is healthy
+NS_TIMEOUT="3" # http://linux.die.net/man/5/resolv.conf
+NS_WRITEPROTECT="no" # Use this to write-protect /etc/resolv.conf
 ```
 
 ## Notes
 
 `nslookup.sh`:
 
-- `nslookup.sh` only rewrites `/etc/resolv.conf` if it has changes.
+- only rewrites `/etc/resolv.conf` if it has changes
 - makes a backup to e.g. `/etc/resolv.conf.bak-20130327114321`
-- needs to be run as `root`
+- needs to run as `root`
 
 ## Tips
 
@@ -104,7 +104,7 @@ For more information on SemVer, please visit [http://semver.org/]().
 
 ## License
 
-Copyright (c) 2013 Kevin van Zonneveld, [http://kvz.io]()
+Copyright (c) 2013 Kevin van Zonneveld, [http://kvz.io]()  
 Licensed under MIT: [http://kvz.mit-license.org]()
 
 
