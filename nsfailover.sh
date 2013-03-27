@@ -1,6 +1,7 @@
 #!/bin/bash
 #
-# DNS Failover that works
+# DNS Failover that works  More info: http://kvz.io/blog/2013/03/27/poormans-way-to-decent-dns-failover/
+# Version v0.0.1
 #
 # You can have many nameserver entries in your /etc/resolv.conf
 # but if your primary nameserver fails, there is no intelligent
@@ -18,10 +19,10 @@
 # Usage:
 #  NS_1=10.0.0.1 sudo -E ./nsfailover.sh
 #
-# By default fails back to Google resolving Nameservers.
+# By default fails back to Google & Level3 resolving Nameservers.
 #
 # Based on BASH3 Boilerplate v0.0.2 (https://github.com/kvz/bash3boilerplate)
-# Licensed under MIT
+# Licensed under MIT: https://github.com/kvz/bash3boilerplate
 # Copyright (c) 2013 Kevin van Zonneveld
 # http://twitter.com/kvz
 #
