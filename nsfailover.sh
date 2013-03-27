@@ -114,7 +114,7 @@ function ns_healthy() {
   if [ -z "${result}" ] || [ "${exitcode}" -ne 0 ]; then
     echo "no"
   else
-  	echo "yes"
+    echo "yes"
   fi
 }
 
