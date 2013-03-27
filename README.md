@@ -9,7 +9,7 @@ may need to write your own solution as you mentioned. " - Amazon Web Services Ja
 Read a [longer introduction on my blog](http://kvz.io/blog/2013/03/27/poormans-way-to-decent-dns-failover/)
 which was [featured on Hacker News](https://news.ycombinator.com/item?id=5450140)' frontpage. 
 
-This simple program defeats DNS outages bringing down your platform.
+This simple program makes DNS outages suck less.
 
 ## nsfailover
 
