@@ -1,43 +1,23 @@
-# nsfailover
+## Intro
 
-Makes it suck less when your resolving Nameserver is unreachable.
-
-You can have many nameserver entries in your `/etc/resolv.conf`
-but if your primary nameserver fails, there is no intelligent
-failover mechanism.
-
-E.g. every resolving request still goes by
-the primary server, waits for a timeout, then tries (the first server again
-depending on your `attempts` config, then) the second
-nameserver. This can cause serious delays & even downtime if your
-primary nameserver fails, and your app relies on resolving any domainname
-to an IP that's not in your `/etc/hosts` file.
-
-Although resolving nameservers are often redundant, downtime & unreachable
-networks happen. At [Transloadit](http://transloadit.com) we rely on working
-nameservers and Amazon's infamous `172.16.0.23` has been down for us
-many times.
-
-People suggest two solutions:
-
- - Use a virtual IP, loadbalance to multiple resolving servers
- - Use [dnrd](http://dnrd.sourceforge.net/), proxy to multiple resolving servers
-
-Both just introduce more components that can go down (SPOFs). 
-I want something as archaic and robust as it can be.
-
-Together with EC2 Premium support we have established that:
+Together with EC2 Premium support I've established that:
 
 > "Unfortunately the Linux DNS resolver doesn't seem to have direct
 support for detecting and doing failovers for DNS servers so you 
 may need to write your own solution as you mentioned. " - Amazon Web Services Jan 22, 2013 01:13 AM PST
 
-So I've decided to do this with just crontab and bash.
+Read a [longer introduction on my blog](http://kvz.io/blog/2013/03/27/poormans-way-to-decent-dns-failover/). 
+
+This simple program defeats DNS outages bringing down your platform.
+
+## nsfailover
 
 Every minute, `nslookup.sh` checks to see if the primary configured nameserver
-can resolve `google.com`, and writes that to `/etc/resolf.conf`.
-If it cannot, it writes the secondary, or tertary server.
-This way, requests are stalled for a minute, tops, and all following requests
+can resolve `google.com`.
+If it cannot, it writes the secondary, or even tertary server to 
+function as the primary server in `/etc/resolf.conf`.
+
+This way, requests are stalled for max a minute, and then all following requests
 are fast, even if the primary stays down.
 
 ## Install
