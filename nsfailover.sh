@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # DNS Failover that works  More info: http://kvz.io/blog/2013/03/27/poormans-way-to-decent-dns-failover/
-# Version v0.0.1
+# Version v0.0.2
 #
 # You can have many nameserver entries in your /etc/resolv.conf
 # but if your primary nameserver fails, there is no intelligent
@@ -127,6 +127,8 @@ elif [ "$(ns_healthy "${NS_2}" "${NS_TESTDOMAIN}")" = "yes" ]; then
 elif [ -n "${NS_3}" ] && [ "$(ns_healthy "${NS_3}" "${NS_TESTDOMAIN}")" = "yes" ]; then
   use_server="${NS_3}"
   use_level="tertiary"
+else
+  emergency "Tried ${NS_1}, ${NS_2}, ${NS_3} but no nameserver was found healthy. Network ok?"
 fi
 
 curdate="$(date -u +"%Y%m%d%H%M%S")"
