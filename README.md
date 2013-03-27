@@ -20,16 +20,17 @@ many times.
 
 People suggest two solutions:
 
- - using a Virtual IP for this using keepalive & VRRP
- - [dnrd](http://dnrd.sourceforge.net/) which proxies dns requests
+ - Use a virtual IP, loadbalance to multiple resolving servers
+ - Use [dnrd](http://dnrd.sourceforge.net/), proxy to multiple resolving servers
 
-Both add way too much tech that can fail. I want something as archaic
-and robust as it can be.
+Both just introduce more components that can go down (SPOFs). 
+I want something as archaic and robust as it can be.
 
 Together with EC2 Premium support we have established that:
 
-> Unfortunately the Linux DNS resolver doesn't seem to have direct support for detecting and doing failovers for DNS servers so you may need to write your own solution as you mentioned.
-- Amazon Web Services Jan 22, 2013 01:13 AM PST
+> "Unfortunately the Linux DNS resolver doesn't seem to have direct
+support for detecting and doing failovers for DNS servers so you 
+may need to write your own solution as you mentioned. " - Amazon Web Services Jan 22, 2013 01:13 AM PST
 
 So I've decided to do this with just crontab and bash.
 
@@ -39,16 +40,22 @@ If it cannot, it writes the secondairy, or tertiary server.
 This way, requests are stalled for a minute, tops, and all following requests
 are fast, even if the primary stays down.
 
+## Install
+
+```bash
+sudo curl -q https://raw.github.com/kvz/nsfailover/master/nsfailover.sh -o /usr/bin/nsfailover.sh && sudo chmod +x $_
+```
+
 ## Example
 
 ```bash
-$ crontab -e
-* * * * * NS_1=172.16.0.23 /tools/nsfailover.sh 2>&1 |logger -t cron-nsfailover
+crontab -e
+* * * * * NS_1=172.16.0.23 nsfailover.sh 2>&1 |logger -t cron-nsfailover
 ```
 
 ## Config
 
-`nsfailover.sh` is configured via environment variables.
+`nsfailover.sh` is configured through environment variables.
 Here they are with their defaults:
 
 
