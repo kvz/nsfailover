@@ -83,11 +83,29 @@ NS_SEARCH="" # Domain to search hosts in (compute-1.internal for Amazon EC2)
 
 ## Tips
 
-- Prefix your cronjob with `timeout -s 9 50s` so there can never be an overlap
+- Prefix your cronjob with `timeout -s 9 50s` so there can never be an overlap. 
+More tips in my [Lock your Cronjobs](http://kvz.io/blog/2012/12/31/lock-your-cronjobs/) article.
 
-## Licensse
+## Versioning
 
-MIT: http://kvz.mit-license.org
+This project implements the Semantic Versioning guidelines.
+
+Releases will be numbered with the following format:
+
+`<major>.<minor>.<patch>`
+
+And constructed with the following guidelines:
+
+* Breaking backward compatibility bumps the major (and resets the minor and patch)
+* New additions without breaking backward compatibility bumps the minor (and resets the patch)
+* Bug fixes and misc changes bumps the patch
+
+For more information on SemVer, please visit [http://semver.org/]().
+
+## License
+
+Copyright (c) 2013 Kevin van Zonneveld, [http://kvz.io]()
+Licensed under MIT: [http://kvz.mit-license.org]()
 
 
 
