@@ -1,7 +1,13 @@
 #!/bin/bash
 #
-# DNS Failover that works  More info: http://kvz.io/blog/2013/03/27/poormans-way-to-decent-dns-failover/
-# Version v0.0.2
+# DNS Failover that works  
+# Version v0.0.3
+#
+# More info: http://kvz.io/blog/2013/03/27/poormans-way-to-decent-dns-failover/
+#
+# Licensed under MIT: https://github.com/kvz/bash3boilerplate
+# Copyright (c) 2013 Kevin van Zonneveld
+# http://twitter.com/kvz
 #
 # You can have many nameserver entries in your /etc/resolv.conf
 # but if your primary nameserver fails, there is no intelligent
@@ -44,7 +50,6 @@
 [ -z "${NS_FILE}" ]         && NS_FILE="/etc/resolv.conf" # Where to write resolving conf
 [ -z "${NS_SEARCH}" ]       && NS_SEARCH="" # Domain to search hosts in (compute-1.internal for Amazon EC2)
 
-
 # Set magic variables for current FILE & DIR
 __DIR__="$(cd "$(dirname "${0}")"; echo $(pwd))"
 __FILE__="${__DIR__}/$(basename "${0}")"
@@ -78,33 +83,6 @@ function notice ()    { [ "${LOG_LEVEL}" -ge 5 ] && echo "$(_fmt notice) ${@}" |
 function info ()      { [ "${LOG_LEVEL}" -ge 6 ] && echo "$(_fmt info) ${@}" || true; }
 function debug ()     { [ "${LOG_LEVEL}" -ge 7 ] && echo "$(_fmt debug) ${@}" || true; }
 
-#function cleanup_before_exit () {
-  # info "Cleaning up. Done"
-#}
-#trap cleanup_before_exit EXIT
-
-### Validation (decide what's required for running your script and error out)
-#####################################################################
-
-
-[ "${NS_ENABLE}" != "yes" ] && info "$(basename "${__FILE__}") is not enabled. " && exit 0
-[ -z "${LOG_LEVEL}" ] && emergency "Cannot continue without LOG_LEVEL. "
-[ -z "${NS_1}" ] && emergency "Cannot continue without NS_1. "
-[ -z "${NS_2}" ] && emergency "Cannot continue without NS_2. "
-
-
-### Runtime
-#####################################################################
-
-# Exit on error. Append ||true if you expect an error.
-# set -e is safer than #!/bin/bash -e because that is nutralised if
-# someone runs your script like `bash yourscript.sh`
-set -ue
-
-# Bash will remember & return the highest exitcode in a chain of pipes.
-# This way you can catch the error in case mysqldump fails in `mysqldump |gzip`
-set -o pipefail
-
 function ns_healthy() {
   local nserver="${1}"
   local domain="${2}"
@@ -118,6 +96,21 @@ function ns_healthy() {
   fi
 }
 
+
+### Validation (decide what's required for running your script and error out)
+#####################################################################
+
+[ "${NS_ENABLE}" != "yes" ] && info "$(basename "${__FILE__}") is not enabled. " && exit 0
+[ -z "${LOG_LEVEL}" ] && emergency "Cannot continue without LOG_LEVEL. "
+[ -z "${NS_1}" ] && emergency "Cannot continue without NS_1. "
+[ -z "${NS_2}" ] && emergency "Cannot continue without NS_2. "
+
+
+### Runtime
+#####################################################################
+
+set -ue
+
 if [ "$(ns_healthy "${NS_1}" "${NS_TESTDOMAIN}")" = "yes" ]; then
   use_server="${NS_1}"
   use_level="primary"
@@ -128,25 +121,32 @@ elif [ -n "${NS_3}" ] && [ "$(ns_healthy "${NS_3}" "${NS_TESTDOMAIN}")" = "yes" 
   use_server="${NS_3}"
   use_level="tertiary"
 else
+  # 3 misfires. Must be this box is down, or misconfiguration
   emergency "Tried ${NS_1}, ${NS_2}, ${NS_3} but no nameserver was found healthy. Network ok?"
 fi
 
-curdate="$(date -u +"%Y%m%d%H%M%S")"
+
 info "Best nameserver is ${use_level} (${use_server})"
 
+# Build new config (without comments!)
 resolvconf="nameserver ${use_server}
 options timeout:${NS_TIMEOUT} attempts:${NS_ATTEMPTS}"
+# Optionally add search parameter
 [ -n "${NS_SEARCH}" ] && resolvconf="${resolvconf}
 search ${NS_SEARCH}"
 
+# Load current config (without comments)
 current="$(cat "${NS_FILE}" |egrep -v '^#')"
 
+# Is the config updated?
 if [ "${resolvconf}" != "${current}" ]; then
+  curdate="$(date -u +"%Y%m%d%H%M%S")"
   cp "${NS_FILE}"{,.bak-${curdate}}
-  [ "${NS_WRITEPROTECT}" = "yes" ] && chattr -i "${NS_FILE}" ||true
+  [ "${NS_WRITEPROTECT}" = "yes" ] && chattr -i "${NS_FILE}" || true
   echo -e "# Written by ${__FILE__} @ ${curdate}\n${resolvconf}" |tee "${NS_FILE}"
   [ "${NS_WRITEPROTECT}" = "yes" ] && chattr +i "${NS_FILE}"
 
+  # Folks will want to know about this
   emergency "${NS_FILE} change was required to switch to ${use_level} (${use_server})"
 fi
 
