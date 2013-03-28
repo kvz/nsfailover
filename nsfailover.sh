@@ -28,7 +28,7 @@
 # By default fails back to Google & Level3 resolving Nameservers.
 #
 # Based on BASH3 Boilerplate v0.0.2 (https://github.com/kvz/bash3boilerplate)
-# Licensed under MIT: https://github.com/kvz/bash3boilerplate
+# Licensed under MIT: http://kvz.io/licenses/LICENSE-MIT
 # Copyright (c) 2013 Kevin van Zonneveld
 # http://twitter.com/kvz
 #
