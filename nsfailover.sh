@@ -5,7 +5,7 @@
 #
 # More info: http://kvz.io/blog/2013/03/27/poormans-way-to-decent-dns-failover/
 #
-# Licensed under MIT: https://github.com/kvz/bash3boilerplate
+# Licensed under MIT: http://kvz.io/licenses/LICENSE-MIT
 # Copyright (c) 2013 Kevin van Zonneveld
 # http://twitter.com/kvz
 #
