@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-# DNS Failover that works  
-# Version v0.0.3
+# DNS Failover that works
+# Version v0.0.4
 #
 # More info: http://kvz.io/blog/2013/03/27/poormans-way-to-decent-dns-failover/
 #
@@ -45,7 +45,7 @@
 [ -z "${NS_2}" ]            && NS_2="8.8.8.8" # Secundary Nameserver: Google
 [ -z "${NS_3}" ]            && NS_3="4.2.2.2" # Tertiary Nameserver: Level3
 [ -z "${NS_TIMEOUT}" ]      && NS_TIMEOUT="3" # http://linux.die.net/man/5/resolv.conf
-[ -z "${NS_ATTEMPTS}" ]     && NS_ATTEMPTS="1" # http://linux.die.net/man/5/resolv.conf
+[ -z "${NS_ATTEMPTS}" ]     && NS_ATTEMPTS="2" # http://linux.die.net/man/5/resolv.conf
 [ -z "${NS_WRITEPROTECT}" ] && NS_WRITEPROTECT="no" # Use this to write-protect /etc/resolv.conf
 [ -z "${NS_FILE}" ]         && NS_FILE="/etc/resolv.conf" # Where to write resolving conf
 [ -z "${NS_SEARCH}" ]       && NS_SEARCH="" # Domain to search hosts in (compute-1.internal for Amazon EC2)
@@ -130,6 +130,9 @@ info "Best nameserver is ${use_level} (${use_server})"
 
 # Build new config (without comments!)
 resolvconf="nameserver ${use_server}
+nameserver ${NS_1}
+nameserver ${NS_2}
+nameserver ${NS_3}
 options timeout:${NS_TIMEOUT} attempts:${NS_ATTEMPTS}"
 # Optionally add search parameter
 [ -n "${NS_SEARCH}" ] && resolvconf="${resolvconf}
