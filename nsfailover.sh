@@ -151,10 +151,11 @@ if [ "${resolvconf}" != "${current}" ]; then
   [ "${NS_WRITEPROTECT}" = "yes" ] && chattr +i "${NS_FILE}"
 
   # Folks will want to know about this
+  msg="I changed ${NS_FILE} to use ${use_level} (${use_server})"
   if [ "${NS_1}" = "${use_server}"  ]; then
-    notice "I changed ${NS_FILE} to use ${use_level} (${use_server})"
+    notice "${msg}"
   else
-    emergency "I changed ${NS_FILE} to use ${use_level} (${use_server})"
+    emergency "${msg}"
   fi
 fi
 
