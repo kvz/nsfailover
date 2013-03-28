@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # DNS Failover that works
-# Version v0.0.4
+# Version v0.0.5
 #
 # More info: http://kvz.io/blog/2013/03/27/poormans-way-to-decent-dns-failover/
 #
@@ -150,7 +150,11 @@ if [ "${resolvconf}" != "${current}" ]; then
   [ "${NS_WRITEPROTECT}" = "yes" ] && chattr +i "${NS_FILE}"
 
   # Folks will want to know about this
-  emergency "I changed ${NS_FILE} to ${use_level} (${use_server})"
+  if [ "${NS_1}" = "${use_server}"  ]; then
+    notice "I changed ${NS_FILE} to use ${use_level} (${use_server})"
+  else
+    emergency "I changed ${NS_FILE} to use ${use_level} (${use_server})"
+  fi
 fi
 
 info "No need to change ${NS_FILE}"
