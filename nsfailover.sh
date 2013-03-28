@@ -150,7 +150,7 @@ if [ "${resolvconf}" != "${current}" ]; then
   [ "${NS_WRITEPROTECT}" = "yes" ] && chattr +i "${NS_FILE}"
 
   # Folks will want to know about this
-  emergency "${NS_FILE} change was required to switch to ${use_level} (${use_server})"
+  emergency "I changed ${NS_FILE} to ${use_level} (${use_server})"
 fi
 
 info "No need to change ${NS_FILE}"
