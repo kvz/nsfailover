@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # DNS Failover that works
-# Version v0.0.6
+# Version v0.0.7
 #
 # More info: http://kvz.io/blog/2013/03/27/poormans-way-to-decent-dns-failover/
 #
@@ -140,7 +140,7 @@ options timeout:${NS_TIMEOUT} attempts:${NS_ATTEMPTS}"
 search ${NS_SEARCH}"
 
 # Load current config (without comments)
-current="$(cat "${NS_FILE}" |egrep -v '^#')"
+current="$(cat "${NS_FILE}" |egrep -v '^#')" || true
 
 # Is the config updated?
 if [ "${resolvconf}" != "${current}" ]; then
