@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # DNS Failover that works
 # Version v0.0.7
