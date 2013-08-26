@@ -16,7 +16,7 @@ This simple program makes DNS outages suck less.
 Every minute (or whatever), `nsfailover.sh` checks to see if the primary configured nameserver
 can resolve `google.com`.
 If it cannot, it writes the secondary, or even tertary server to 
-function as the primary server in `/etc/resolf.conf`.
+function as the primary server in `/etc/resolv.conf`.
 
 This way, requests are stalled for max a minute, and then all following requests
 are fast, even if the primary stays down.
