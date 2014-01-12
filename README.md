@@ -1,4 +1,12 @@
-## Intro
+# nsfailover
+
+<!-- badges/ -->
+[![Build Status](https://secure.travis-ci.org/kvz/nsfailover.png?branch=master)](http://travis-ci.org/kvz/nsfailover "Check this project's build status on TravisCI")
+[![Gittip donate button](http://img.shields.io/gittip/kvz.png)](https://www.gittip.com/kvz/ "Sponsor the development of nsfailover via Gittip")
+[![Flattr donate button](http://img.shields.io/flattr/donate.png?color=yellow)](https://flattr.com/submit/auto?user_id=kvz&url=https://github.com/kvz/nsfailover&title=nsfailover&language=&tags=github&category=software "Sponsor the development of nsfailover via Flattr")
+[![PayPayl donate button](http://img.shields.io/paypal/donate.png?color=yellow)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=kevin%40vanzonneveld%2enet&lc=NL&item_name=Open%20source%20donation%20to%20Kevin%20van%20Zonneveld&currency_code=USD&bn=PP-DonationsBF%3abtn_donate_SM%2egif%3aNonHosted "Sponsor the development of nsfailover via Paypal")
+[![BitCoin donate button](http://img.shields.io/bitcoin/donate.png?color=yellow)](https://coinbase.com/checkouts/19BtCjLCboRgTAXiaEvnvkdoRyjd843Dg2 "Sponsor the development of nsfailover via BitCoin")
+<!-- /badges -->
 
 Together with EC2 Premium support I've established that:
 
@@ -7,7 +15,7 @@ support for detecting and doing failovers for DNS servers so you
 may need to write your own solution as you mentioned. " - Amazon Web Services Jan 22, 2013 01:13 AM PST
 
 Read a [longer introduction on my blog](http://kvz.io/blog/2013/03/27/poormans-way-to-decent-dns-failover/)
-which was [featured on Hacker News](https://news.ycombinator.com/item?id=5450140)' frontpage. 
+which was [featured on Hacker News](https://news.ycombinator.com/item?id=5450140). 
 
 This simple program makes DNS outages suck less.
 
