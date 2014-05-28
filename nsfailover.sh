@@ -147,7 +147,17 @@ if [ "${resolvconf}" != "${current}" ]; then
   curdate="$(date -u +"%Y%m%d%H%M%S")"
   cp "${NS_FILE}"{,.bak-${curdate}}
   [ "${NS_WRITEPROTECT}" = "yes" ] && chattr -i "${NS_FILE}" || true
-  echo -e "# Written by ${__FILE__} @ ${curdate}\n${resolvconf}" |tee "${NS_FILE}"
+  resolvconf="# Written by ${__FILE__} @ ${curdate}
+${resolvconf}"
+  tmpfile="${NS_FILE}.tmp"
+  echo "$resolvconf" > $tmpfile
+  # paranoid check if file has changed since written
+  if diff $tmpfile <(echo "$resolvconf"); then
+    # atomic copy
+    mv $tmpfile $NS_FILE
+  else
+    emergency "Temp file ${tempfile} changed since creation"
+  fi
   [ "${NS_WRITEPROTECT}" = "yes" ] && chattr +i "${NS_FILE}"
 
   # Folks will want to know about this
