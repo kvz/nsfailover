@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # DNS Failover that works
-# Version v0.0.7
+# Version v0.1.7
 #
 # More info: http://kvz.io/blog/2013/03/27/poormans-way-to-decent-dns-failover/
 #
