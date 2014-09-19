@@ -130,11 +130,16 @@ fi
 info "Best nameserver is ${use_level} (${use_server})"
 
 # Build new config (without comments!)
-resolvconf="nameserver ${use_server}
-nameserver ${NS_1}
-nameserver ${NS_2}
-nameserver ${NS_3}
-options timeout:${NS_TIMEOUT} attempts:${NS_ATTEMPTS}"
+resolvconf="nameserver ${use_server}\n"
+for ns in ${NS_1} ${NS_2} ${NS_3}
+do
+        if [[ "$ns" != "${use_server}" ]]
+        then
+                resolvconf+="nameserver $ns\n"
+        fi
+done
+resolvconf+="options timeout:${NS_TIMEOUT} attempts:${NS_ATTEMPTS}"
+
 # Optionally add search parameter
 [ -n "${NS_SEARCH}" ] && resolvconf="${resolvconf}
 search ${NS_SEARCH}"
