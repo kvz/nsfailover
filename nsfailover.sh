@@ -111,16 +111,22 @@ function ns_healthy() {
 #####################################################################
 
 set -ue
-
+resolvconf="# Do not edit. Updated by cron process!!"
 if [ "$(ns_healthy "${NS_1}" "${NS_TESTDOMAIN}")" = "yes" ]; then
   use_server="${NS_1}"
   use_level="primary"
+  resolvconf="${resolvconf}
+nameserver ${use_server}"
 elif [ "$(ns_healthy "${NS_2}" "${NS_TESTDOMAIN}")" = "yes" ]; then
   use_server="${NS_2}"
   use_level="secondary"
+  resolvconf="${resolvconf}
+nameserver ${use_server}"
 elif [ -n "${NS_3}" ] && [ "$(ns_healthy "${NS_3}" "${NS_TESTDOMAIN}")" = "yes" ]; then
   use_server="${NS_3}"
   use_level="tertiary"
+  resolvconf="${resolvconf}
+nameserver ${use_server}"
 else
   # 3 misfires. Must be this box is down, or misconfiguration
   emergency "Tried ${NS_1}, ${NS_2}, ${NS_3} but no nameserver was found healthy. Network ok?"
@@ -130,10 +136,11 @@ fi
 info "Best nameserver is ${use_level} (${use_server})"
 
 # Build new config (without comments!)
-resolvconf="nameserver ${use_server}
-nameserver ${NS_1}
-nameserver ${NS_2}
-nameserver ${NS_3}
+#resolvconf="nameserver ${use_server}
+#nameserver ${NS_1}
+#nameserver ${NS_2}
+#nameserver ${NS_3}
+resolvconf="${resolvconf}
 options timeout:${NS_TIMEOUT} attempts:${NS_ATTEMPTS}"
 # Optionally add search parameter
 [ -n "${NS_SEARCH}" ] && resolvconf="${resolvconf}
@@ -147,7 +154,7 @@ if [ "${resolvconf}" != "${current}" ]; then
   curdate="$(date -u +"%Y%m%d%H%M%S")"
   cp "${NS_FILE}"{,.bak-${curdate}}
   [ "${NS_WRITEPROTECT}" = "yes" ] && chattr -i "${NS_FILE}" || true
-  resolvconf="# Written by ${__FILE__} @ ${curdate}
+  resolvconf="# Built by ${__FILE__} @ ${curdate}
 ${resolvconf}"
   tmpfile="${NS_FILE}.tmp"
   echo "$resolvconf" > $tmpfile
