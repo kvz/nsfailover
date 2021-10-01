@@ -148,6 +148,7 @@ search ${NS_SEARCH}"
 
 # Load current config (without comments)
 current="$(cat "${NS_FILE}" |egrep -v '^#')" || true
+resolvconf=$(echo "$resolvconf" | egrep -v '^#')
 
 # Is the config updated?
 if [ "${resolvconf}" != "${current}" ]; then
@@ -174,6 +175,6 @@ ${resolvconf}"
   else
     emergency "${msg}"
   fi
+else
+  info "No need to change ${NS_FILE}"
 fi
-
-info "No need to change ${NS_FILE}"
