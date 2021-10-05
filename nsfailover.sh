@@ -41,7 +41,7 @@
 [ -z "${LOG_LEVEL}" ]       && LOG_LEVEL="6" # 7 = debug, 0 = emergency
 [ -z "${NS_ENABLE}" ]       && NS_ENABLE="no" # Set to no to disable
 [ -z "${NS_TESTDOMAIN}" ]   && NS_TESTDOMAIN="google.com" # Use this to determine if NS is healthy
-[ -z "${NS_1}" ]            && NS_1="" # Primary Nameserver (200.17.203.6 for Núcleo de Concursos). You need to set this yourself
+[ -z "${NS_1}" ]            && NS_1="" # Primary Nameserver (172.16.0.23 for Amazon EC2). You need to set this yourself
 [ -z "${NS_2}" ]            && NS_2="8.8.8.8" # Secundary Nameserver: Google
 [ -z "${NS_3}" ]            && NS_3="4.2.2.2" # Tertiary Nameserver: Level3
 [ -z "${NS_TIMEOUT}" ]      && NS_TIMEOUT="3" # http://linux.die.net/man/5/resolv.conf
@@ -150,10 +150,10 @@ search ${NS_SEARCH}"
 # Load current config (without comments)
 current="$(cat "${NS_FILE}" | egrep -v '^#')" || true
 
-commentLessResolvConf=$(echo "$resolvconf" | egrep -v '^#')
+resolvNoComment=$(echo "$resolvconf" | egrep -v '^#')
 
 # Is the config updated?
-if [ "${commentLessResolvConf}" != "${current}" ]; then
+if [ "${resolvNoComment}" != "${current}" ]; then
   curdate="$(date -u +"%Y%m%d%H%M%S")"
   cp "${NS_FILE}"{,.bak-${curdate}}
   [ "${NS_WRITEPROTECT}" = "yes" ] && chattr -i "${NS_FILE}" || true
