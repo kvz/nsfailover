@@ -61,13 +61,13 @@ __FILE__="${__DIR__}/$(basename "${0}")"
 function _fmt ()      {
   color_ok="\x1b[32m"
   color_bad="\x1b[31m"
-
   color="${color_bad}"
+
   if [ "${1}" = "debug" ] || [ "${1}" = "info" ] || [ "${1}" = "notice" ]; then
     color="${color_ok}"
   fi
-
   color_reset="\x1b[0m"
+
   if [ "${TERM}" != "xterm" ] || [ -t 1 ]; then
     # Don't use colors on pipes or non-recognized terminals
     color=""; color_reset=""
@@ -140,6 +140,7 @@ info "Best nameserver is ${use_level} (${use_server})"
 #nameserver ${NS_1}
 #nameserver ${NS_2}
 #nameserver ${NS_3}
+
 resolvconf="${resolvconf}
 options timeout:${NS_TIMEOUT} attempts:${NS_ATTEMPTS}"
 # Optionally add search parameter
@@ -147,10 +148,12 @@ options timeout:${NS_TIMEOUT} attempts:${NS_ATTEMPTS}"
 search ${NS_SEARCH}"
 
 # Load current config (without comments)
-current="$(cat "${NS_FILE}" |egrep -v '^#')" || true
+current="$(cat "${NS_FILE}" | egrep -v '^#')" || true
+
+resolvNoComment=$(echo "$resolvconf" | egrep -v '^#')
 
 # Is the config updated?
-if [ "${resolvconf}" != "${current}" ]; then
+if [ "${resolvNoComment}" != "${current}" ]; then
   curdate="$(date -u +"%Y%m%d%H%M%S")"
   cp "${NS_FILE}"{,.bak-${curdate}}
   [ "${NS_WRITEPROTECT}" = "yes" ] && chattr -i "${NS_FILE}" || true
@@ -174,6 +177,6 @@ ${resolvconf}"
   else
     emergency "${msg}"
   fi
+else
+  info "No need to change ${NS_FILE}"
 fi
-
-info "No need to change ${NS_FILE}"
